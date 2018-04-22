@@ -6,14 +6,18 @@ from typing import List
 import requests
 
 
-PRODUCT_CATEGORIES = {
-    Products.MBP_13: 'https://www.apple.com/shop/browse/home/specialdeals/mac/macbook_pro/13',
+BASE_URL = 'https://www.apple.com'
+
+PRODUCT_LISTING_PAGES = {
+    Products.MBP: '/shop/browse/home/specialdeals/mac/macbook_pro',
+    Products.MBP_13: '/shop/browse/home/specialdeals/mac/macbook_pro/13',
+    Products.MBP_15: '/shop/browse/home/specialdeals/mac/macbook_pro/15',
 }
 
 
 class Specs:
-    def __init__(self, release: str, screen: str, memory: str, ssd: str, camera: str, graphics: str, touch_bar: bool):
-        self.release = release
+    def __init__(self, released: str, screen: str, memory: str, ssd: str, camera: str, graphics: str, touch_bar: bool):
+        self.released = released
         self.screen = screen
         self.memory = memory
         self.ssd = ssd
@@ -37,7 +41,7 @@ class Product:
 
 
 def get_current_listings_for_product(product: Products) -> List[Product]:
-    url = PRODUCT_CATEGORIES[product]
+    url = BASE_URL + PRODUCT_LISTING_PAGES[product]
     text = requests.get(url).text
     soup = BeautifulSoup(text, "html5lib")
     refurb_list = soup.find(**{'class': 'refurb-list'})
@@ -56,7 +60,13 @@ def process_listing_table(table: BeautifulSoup) -> Product:
     title = raw_specs.h3
     url = title.a['href']
     name = title.a.text.strip()
-    specs = process_specs(simplify_specs(raw_specs.text))
+    try:
+        specs = process_specs(simplify_specs(raw_specs.text))
+    except RuntimeError:
+        print("Could not process specs for product:")
+        print("  " + name)
+        print("  " + BASE_URL + url)
+        raise
     raw_price = product.find(**{'itemprop': 'price'})
     if raw_price is None:
         raise RuntimeError("No price found.")
@@ -69,14 +79,14 @@ def simplify_specs(text: str) -> List[str]:
 
 
 def process_specs(specs: List[str]) -> Specs:
-    release = find_line(specs, 'released')
+    released = find_line(specs, 'released')
     screen = find_line(specs, 'resolution')
-    memory = find_line(specs, 'memory')
+    memory = find_line(specs, 'LPDDR3')
     ssd = find_line(specs, 'SSD')
     camera = find_line(specs, 'Camera')
     graphics = find_line(specs, 'Graphics')
     touch_bar = has_reference(specs, 'Touch Bar')
-    return Specs(release=release, screen=screen, memory=memory, ssd=ssd, camera=camera, graphics=graphics,
+    return Specs(released=released, screen=screen, memory=memory, ssd=ssd, camera=camera, graphics=graphics,
                  touch_bar=touch_bar)
 
 
