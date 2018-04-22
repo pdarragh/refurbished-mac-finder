@@ -12,6 +12,10 @@ def search_for_products_matching_specifications(product: Products, specification
     return list(listings)
 
 
+def matches_name(name: str, product: Product) -> bool:
+    return name in product.name
+
+
 def below_price(price: str, product: Product) -> bool:
     price = float(price[1:])
     return float(product.price[1:]) < price
