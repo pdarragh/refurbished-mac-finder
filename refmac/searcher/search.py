@@ -1,12 +1,16 @@
 from .products import *
 from .scrape import Product, get_current_listings_for_product
 
+from functools import partial
 from typing import Callable, List
 
 
-def search_for_products_matching_specifications(product: Products, specifications: List[Callable[[Product], bool]]
+Specification = Callable[[Product], bool]
+
+
+def search_for_products_matching_specifications(product_type: Products, specifications: List[Specification]
                                                 ) -> List[Product]:
-    listings = get_current_listings_for_product(product)
+    listings = filter(lambda l: l is not None, get_current_listings_for_product(product_type))
     for specification in specifications:
         listings = filter(specification, listings)
     return list(listings)
@@ -37,13 +41,23 @@ def matches_ssd(ssd: str, product: Product) -> bool:
     return ssd in product.specs.ssd
 
 
-def matches_camera(camera: str, product: Product) -> bool:
-    return camera in product.specs.camera
+def has_touch_bar(want: bool, product: Product) -> bool:
+    return want == product.specs.touch_bar
 
 
-def matches_graphics(graphics: str, product: Product) -> bool:
-    return graphics in product.specs.graphics
+SPECIFICATIONS = {
+    'name': matches_name,
+    'price': below_price,
+    'release_date': matches_release_date,
+    'screen': matches_screen,
+    'memory': matches_memory,
+    'ssd': matches_ssd,
+    'touch_bar': has_touch_bar,
+}
 
 
-def has_touch_bar(product: Product) -> bool:
-    return product.specs.touch_bar
+def build_specifications(**kwargs) -> List[Specification]:
+    specifications: List[Specification] = []
+    for key, val in kwargs.items():
+        specifications.append(partial(SPECIFICATIONS[key], val))
+    return specifications

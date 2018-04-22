@@ -16,14 +16,15 @@ PRODUCT_LISTING_PAGES = {
 
 
 class Specs:
-    def __init__(self, released: str, screen: str, memory: str, ssd: str, camera: str, graphics: str, touch_bar: bool):
+    def __init__(self, released: str, screen: str, memory: str, ssd: str, touch_bar: bool):
         self.released = released
         self.screen = screen
         self.memory = memory
         self.ssd = ssd
-        self.camera = camera
-        self.graphics = graphics
         self.touch_bar = touch_bar
+        for k, v in vars(self).items():
+            if v is None:
+                raise RuntimeError(f"No value supplied to Specs for field: {k}")
 
     def __repr__(self):
         return repr(vars(self))
@@ -35,6 +36,9 @@ class Product:
         self.price = price
         self.url = url
         self.specs = specs
+        for k, v in vars(self).items():
+            if v is None:
+                raise RuntimeError("No value supplied to Product for field: {k}")
 
     def __repr__(self):
         return self.name
@@ -81,13 +85,10 @@ def simplify_specs(text: str) -> List[str]:
 def process_specs(specs: List[str]) -> Specs:
     released = find_line(specs, 'released')
     screen = find_line(specs, 'resolution')
-    memory = find_line(specs, 'LPDDR3')
-    ssd = find_line(specs, 'SSD')
-    camera = find_line(specs, 'Camera')
-    graphics = find_line(specs, 'Graphics')
+    memory = find_line(specs, 'onboard memory')
+    ssd = find_line(specs, 'PCIe-based')
     touch_bar = has_reference(specs, 'Touch Bar')
-    return Specs(released=released, screen=screen, memory=memory, ssd=ssd, camera=camera, graphics=graphics,
-                 touch_bar=touch_bar)
+    return Specs(released=released, screen=screen, memory=memory, ssd=ssd, touch_bar=touch_bar)
 
 
 def find_line(lines: List[str], keyword: str) -> str:
