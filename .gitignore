@@ -105,4 +105,4 @@ venv.bak/
 
 # Project-specific
 .idea
-twilio_auth.json
+twilio_conf.json
