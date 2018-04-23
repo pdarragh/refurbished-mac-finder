@@ -44,6 +44,19 @@ class Product:
     def __repr__(self):
         return self.name
 
+    def __str__(self):
+        lines = [
+            self.name,
+            "  ID: " + self.object_id,
+            "  URL: " + self.url,
+            "  Price: " + self.price,
+        ]
+        if self.specs is not None:
+            lines.append("  Specs:")
+            for k, v in vars(self.specs).items():
+                lines.append(f"    {k}: {v}")
+        return '\n'.join(lines)
+
 
 def get_current_listings_for_product(product: ProductType) -> List[Product]:
     url = BASE_URL + PRODUCT_LISTING_PAGES[product]
