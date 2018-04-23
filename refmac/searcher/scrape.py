@@ -1,4 +1,4 @@
-from .products import *
+from .producttype import *
 
 from bs4 import BeautifulSoup
 from typing import List
@@ -9,9 +9,9 @@ import requests
 BASE_URL = 'https://www.apple.com'
 
 PRODUCT_LISTING_PAGES = {
-    Products.MBP: '/shop/browse/home/specialdeals/mac/macbook_pro',
-    Products.MBP_13: '/shop/browse/home/specialdeals/mac/macbook_pro/13',
-    Products.MBP_15: '/shop/browse/home/specialdeals/mac/macbook_pro/15',
+    ProductType.MBP:    '/shop/browse/home/specialdeals/mac/macbook_pro',
+    ProductType.MBP_13: '/shop/browse/home/specialdeals/mac/macbook_pro/13',
+    ProductType.MBP_15: '/shop/browse/home/specialdeals/mac/macbook_pro/15',
 }
 
 
@@ -45,7 +45,7 @@ class Product:
         return self.name
 
 
-def get_current_listings_for_product(product: Products) -> List[Product]:
+def get_current_listings_for_product(product: ProductType) -> List[Product]:
     url = BASE_URL + PRODUCT_LISTING_PAGES[product]
     text = requests.get(url).text
     soup = BeautifulSoup(text, "html5lib")

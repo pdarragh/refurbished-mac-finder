@@ -1,4 +1,4 @@
-from .products import *
+from .producttype import *
 from .scrape import Product, get_current_listings_for_product
 
 from functools import partial
@@ -8,7 +8,7 @@ from typing import Callable, List
 Specification = Callable[[Product], bool]
 
 
-def search_for_products_matching_specifications(product_type: Products, specifications: List[Specification]
+def search_for_products_matching_specifications(product_type: ProductType, specifications: List[Specification]
                                                 ) -> List[Product]:
     listings = filter(lambda l: l is not None, get_current_listings_for_product(product_type))
     for specification in specifications:
