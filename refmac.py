@@ -6,7 +6,7 @@ if __name__ == '__main__':
     import json
     parser = argparse.ArgumentParser()
     parser.add_argument('product_type', metavar='product-type', choices=[t for t in ProductType], type=lambda s: getattr(ProductType, s))
-    parser.add_argument('--auth-file', type=argparse.FileType('r'))
+    parser.add_argument('--auth-file', type=argparse.FileType('r'), default='twilio_conf.json')
     parser.add_argument('--twilio-sid')
     parser.add_argument('--twilio-token')
     parser.add_argument('--specs', type=json.loads, default={})
