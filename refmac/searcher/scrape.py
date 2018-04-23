@@ -62,14 +62,14 @@ def process_listing_table(table: BeautifulSoup) -> Product:
     if raw_specs is None:
         raise RuntimeError("No specs found.")
     title = raw_specs.h3
-    url = title.a['href']
+    url = BASE_URL + title.a['href']
     name = title.a.text.strip()
     try:
         specs = process_specs(simplify_specs(raw_specs.text))
     except RuntimeError:
         print("Could not process specs for product:")
         print("  " + name)
-        print("  " + BASE_URL + url)
+        print("  " + url)
         raise
     raw_price = product.find(**{'itemprop': 'price'})
     if raw_price is None:
