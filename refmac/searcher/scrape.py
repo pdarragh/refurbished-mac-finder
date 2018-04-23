@@ -31,7 +31,8 @@ class Specs:
 
 
 class Product:
-    def __init__(self, name: str, price: str, url: str, specs: Specs):
+    def __init__(self, object_id: str, name: str, price: str, url: str, specs: Specs):
+        self.object_id = object_id
         self.name = name
         self.price = price
         self.url = url
@@ -62,8 +63,9 @@ def process_listing_table(table: BeautifulSoup) -> Product:
     if raw_specs is None:
         raise RuntimeError("No specs found.")
     title = raw_specs.h3
-    url = BASE_URL + title.a['href']
+    object_id = title.a['data-s-object-id']
     name = title.a.text.strip()
+    url = BASE_URL + title.a['href']
     try:
         specs = process_specs(simplify_specs(raw_specs.text))
     except RuntimeError:
@@ -75,7 +77,7 @@ def process_listing_table(table: BeautifulSoup) -> Product:
     if raw_price is None:
         raise RuntimeError("No price found.")
     price = raw_price.text.strip()
-    return Product(name=name, price=price, url=url, specs=specs)
+    return Product(object_id=object_id, name=name, price=price, url=url, specs=specs)
 
 
 def simplify_specs(text: str) -> List[str]:
