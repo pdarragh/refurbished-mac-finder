@@ -36,7 +36,7 @@ if __name__ == '__main__':
         send_from = args.send_from
 
     if args.send_to is not None:
-        send_to = args.send_to
+        send_to = [args.send_to]
 
     if twilio_account_sid is None:
         raise RuntimeError("No Twilio account SID given!")
