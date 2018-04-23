@@ -5,13 +5,15 @@ if __name__ == '__main__':
     import argparse
     import json
     parser = argparse.ArgumentParser()
-    parser.add_argument('product_type', metavar='product-type', choices=[t for t in ProductType], type=lambda s: getattr(ProductType, s))
+    parser.add_argument('product_type', metavar='product-type', choices=[t for t in ProductType],
+                        type=lambda s: getattr(ProductType, s))
     parser.add_argument('--twilio-file', type=argparse.FileType('r'), default='twilio_conf.json')
     parser.add_argument('--twilio-sid')
     parser.add_argument('--twilio-token')
     parser.add_argument('--send-from')
     parser.add_argument('--send-to')
     parser.add_argument('--specs', type=json.loads, default={})
+    parser.add_argument('--verbose', action='store_true')
     args = parser.parse_args()
 
     twilio_account_sid = None
@@ -52,4 +54,5 @@ if __name__ == '__main__':
 
     print(f"Looking for products of type {args.product_type.name} with specifications: {args.specs}")
 
-    find_and_notify(args.product_type, args.specs, twilio_account_sid, twilio_auth_token, send_from, send_to)
+    find_and_notify(args.product_type, args.specs, twilio_account_sid, twilio_auth_token, send_from, send_to,
+                    args.verbose)

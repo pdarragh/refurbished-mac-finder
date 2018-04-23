@@ -5,10 +5,18 @@ from typing import Dict, List
 
 
 def find_and_notify(product_type: ProductType, specs: Dict[str, str], account_sid: str, auth_token: str, send_from: str,
-                    send_to: List[str]):
+                    send_to: List[str], verbose: bool):
     specifications = build_specifications(**specs)
     matches = search_for_products_matching_specifications(product_type, specifications)
+    if verbose:
+        print("Found the following products matching given specifications:")
+        for match in matches:
+            print()
+            print(match)
+        print()
     for number in send_to:
+        if verbose:
+            print("Notifying " + number)
         notifier = Notifier(account_sid, auth_token, send_from)
         for match in matches:
             lines = [
