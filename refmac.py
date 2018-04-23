@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from refmac.searcher import *
+from refmac import *
 
 if __name__ == '__main__':
     import argparse
@@ -52,7 +52,4 @@ if __name__ == '__main__':
 
     print(f"Looking for products of type {args.product_type.name} with specifications: {args.specs}")
 
-    products = search_for_products_matching_specifications(args.product_type, build_specifications(**args.specs))
-    for product in products:
-        print(product)
-        print()
+    find_and_notify(args.product_type, args.specs, twilio_account_sid, twilio_auth_token, send_from, send_to)
