@@ -1,6 +1,6 @@
 # Refurbished Mac Finder
 
-A tool to help you keep an eye on Apple's refurbished MacBooks.
+A tool to help you keep an eye on Apple's [refurbished MacBook Pros](https://www.apple.com/shop/browse/home/specialdeals/mac/macbook_pro).
 
 ## Prerequisites
 
@@ -79,3 +79,9 @@ price *less than or equal to* the specified price. The `price` parameter accepts
 - `"1,099.00"`
 - `"1099.00"`
 - `"1099"`
+
+## Further Development
+
+Additional product types should be supported. However, this may require reworking the `Product` and `Specs` classes to
+be able to handle information from more varied product lines. (It would also require revising the functions in
+`refmac/searcher/search.py`.)
