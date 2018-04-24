@@ -21,8 +21,9 @@ def matches_name(name: str, product: Product) -> bool:
 
 
 def below_price(price: str, product: Product) -> bool:
-    price = float(price[1:])
-    return float(product.price[1:]) < price
+    max_price = process_price(price)
+    item_price = process_price(product.price)
+    return item_price <= max_price
 
 
 def matches_release_date(date: str, product: Product) -> bool:
@@ -43,6 +44,17 @@ def matches_ssd(ssd: str, product: Product) -> bool:
 
 def has_touch_bar(want: str, product: Product) -> bool:
     return bool(want) == product.specs.touch_bar
+
+
+def process_price(price: str) -> float:
+    price = price.strip('$').replace(',', '')
+    parts = price.split('.')
+    dollars = int(parts[0])
+    if len(parts) > 1:
+        cents = int(parts[1])
+    else:
+        cents = 0
+    return dollars + (cents / 100)
 
 
 SPECIFICATIONS = {
