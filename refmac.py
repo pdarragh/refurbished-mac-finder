@@ -14,6 +14,7 @@ if __name__ == '__main__':
     parser.add_argument('--send-to')
     parser.add_argument('--specs', type=json.loads, default={})
     parser.add_argument('--verbose', action='store_true')
+    parser.add_argument('--no-notify', action='store_true')
     args = parser.parse_args()
 
     twilio_account_sid = None
@@ -40,19 +41,19 @@ if __name__ == '__main__':
     if args.send_to is not None:
         send_to = [args.send_to]
 
-    if twilio_account_sid is None:
+    if not args.no_notify and twilio_account_sid is None:
         raise RuntimeError("No Twilio account SID given!")
 
-    if twilio_auth_token is None:
+    if not args.no_notify and twilio_auth_token is None:
         raise RuntimeError("No Twilio auth token given!")
 
-    if send_from is None:
+    if not args.no_notify and send_from is None:
         raise RuntimeError("No send-from number given!")
 
-    if send_to is None:
+    if not args.no_notify and send_to is None:
         raise RuntimeError("No send-to number given!")
 
     print(f"Looking for products of type {args.product_type.name} with specifications: {args.specs}")
 
     find_and_notify(args.product_type, args.specs, twilio_account_sid, twilio_auth_token, send_from, send_to,
-                    args.verbose)
+                    args.verbose, args.no_notify)
