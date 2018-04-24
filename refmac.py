@@ -13,6 +13,7 @@ if __name__ == '__main__':
     parser.add_argument('--send-from')
     parser.add_argument('--send-to')
     parser.add_argument('--specs', type=json.loads, default={})
+    parser.add_argument('--retry', type=int, default=0)
     parser.add_argument('--verbose', action='store_true')
     parser.add_argument('--no-notify', action='store_true')
     args = parser.parse_args()
@@ -56,4 +57,4 @@ if __name__ == '__main__':
     print(f"Looking for products of type {args.product_type.name} with specifications: {args.specs}")
 
     find_and_notify(args.product_type, args.specs, twilio_account_sid, twilio_auth_token, send_from, send_to,
-                    args.verbose, args.no_notify)
+                    args.retry, args.verbose, args.no_notify)

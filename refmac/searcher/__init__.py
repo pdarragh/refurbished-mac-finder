@@ -1,1 +1,1 @@
-from .search import ProductType, search_for_products_matching_specifications, build_specifications
+from .search import ProductType, Specification, search_for_products_matching_specifications, build_specifications
