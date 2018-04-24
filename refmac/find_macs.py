@@ -17,9 +17,9 @@ def find_and_notify(product_type: ProductType, specs: Dict[str, str], account_si
     # If needed, do a loop.
     count = retry
     while retry:
+        print(f"{count} minutes until next check...")
         sleep(60)
         count -= 1
-        print(f"{count} minutes until next check...")
         if count <= 0:
             try:
                 find()
@@ -37,7 +37,7 @@ def find_and_notify(product_type: ProductType, specs: Dict[str, str], account_si
 def _find_and_notify(product_type: ProductType, specifications: List[Specification], notifier: Notifier,
                      send_to: List[str], verbose: bool, no_notify: bool):
     matches = search_for_products_matching_specifications(product_type, specifications)
-    if verbose:
+    if no_notify or verbose:
         print("Found the following products matching given specifications:")
         for match in matches:
             print()
@@ -45,8 +45,6 @@ def _find_and_notify(product_type: ProductType, specifications: List[Specificati
         print()
     if not no_notify:
         for number in send_to:
-            if verbose:
-                print("Notifying " + number)
             for match in matches:
                 lines = [
                     match.name,
@@ -54,5 +52,7 @@ def _find_and_notify(product_type: ProductType, specifications: List[Specificati
                     match.url
                 ]
                 message = '\n'.join(lines)
+                if verbose:
+                    print("Notifying " + number + " of match " + match.name)
                 notifier.send_message(message, number)
 
