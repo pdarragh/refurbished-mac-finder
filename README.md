@@ -24,16 +24,22 @@ The optional parameters are:
 | Option                | Effect |
 |-----------------------|--------|
 | `--help`              | Show a help message and quit. |
-| `--twilio-file`       | Provide a configuration file (detailed below) for Twilio authentication/notification. |
+| `--twilio-file`       | Provide a configuration file (detailed below) for Twilio authentication/notification. Default value is `twilio_conf.json`. |
 | `--twilio-sid`        | Provide a Twilio account SID manually. |
 | `--twilio-token`      | Provide a Twilio account auth token. |
 | `--send-from`         | Manually specify a number to send texts from (should be your Twilio number). |
 | `--send-to`           | Manually specify a number to send texts to. |
 | `--specs`             | A JSON dictionary representing the specifications to search for (detailed below). |
-| `--retry`             | A number of minutes to wait before automatically repeating the search indefinitely. |
+| `--retry`             | A number of minutes to wait before automatically repeating the search indefinitely. Default value is `0`, which indicates to not retry at all. |
 | `--emergency-contact` | A number to send texts to if an error occurs while retrying (only has effect with `--retry`). |
 | `--verbose`           | Print out search information to stdout. |
 | `--no-notify`         | Do not send messages via Twilio. |
+
+An example invocation:
+
+```
+$ ./refmac.py MBP_13 --no-notify --verbose --specs '{"price": "$1500"}' --no-notify --retry 1
+```
 
 ## Twilio Configuration File
 
@@ -80,8 +86,24 @@ price *less than or equal to* the specified price. The `price` parameter accepts
 - `"1099.00"`
 - `"1099"`
 
+These parameters must be passed on the command line as a JSON dictionary string. For example:
+
+```
+--specs '{"price": "$1,099.00", "memory": "16GB"}'
+```
+
+(The quotes must be structured exactly as this.)
+
 ## Further Development
 
 Additional product types should be supported. However, this may require reworking the `Product` and `Specs` classes to
 be able to handle information from more varied product lines. (It would also require revising the functions in
 `refmac/searcher/search.py`.)
+
+Also, it'd be nice if the specifications could be passed in a more reasonable manner. Perhaps a configuration file
+should be accepted.
+
+One possibility is to actually separate the `searcher` into different sub-packages for each product type (all sharing
+some common superclasses), and to also split the parser into a multi-stage parser (with a separate stage for each
+product line). In this way, specifications could be more naturally given as e.g. `./refmac.py MBP_15 --memory 16GB
+--memory 8GB --ssd 256GB` or something.
