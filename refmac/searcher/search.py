@@ -41,8 +41,8 @@ def matches_ssd(ssd: str, product: Product) -> bool:
     return ssd in product.specs.ssd
 
 
-def has_touch_bar(want: bool, product: Product) -> bool:
-    return want == product.specs.touch_bar
+def has_touch_bar(want: str, product: Product) -> bool:
+    return bool(want) == product.specs.touch_bar
 
 
 SPECIFICATIONS = {
