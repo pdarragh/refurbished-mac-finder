@@ -18,12 +18,12 @@ if __name__ == '__main__':
                         help="The phone number to send results from. (Your Twilio phone number.)")
     parser.add_argument('--send-to',
                         help="The phone number to send results to.")
-    parser.add_argument('--emergency-contact',
-                        help="A phone number to contact if an exception occurs. Only compatible with --retry.")
     parser.add_argument('--specs', type=json.loads, default={},
                         help="The specifications to search for. See documentation.")
     parser.add_argument('--retry', type=int, default=0,
                         help="Retry the search every RETRY minutes. A value of 0 means no retry will occur.")
+    parser.add_argument('--emergency-contact',
+                        help="A phone number to contact if an exception occurs. Only compatible with --retry.")
     parser.add_argument('--verbose', action='store_true',
                         help="Output information about matches found to stdout.")
     parser.add_argument('--no-notify', action='store_true',
