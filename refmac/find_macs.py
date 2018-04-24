@@ -31,7 +31,8 @@ def find_and_notify(product_type: ProductType, specs: Dict[str, str], account_si
                 else:
                     # No emergency contact, so halt execution.
                     raise e
-            count = 0
+            # Mr Gaeta, restart the clock.
+            count = retry
 
 
 def _find_and_notify(product_type: ProductType, specifications: List[Specification], notifier: Notifier,
