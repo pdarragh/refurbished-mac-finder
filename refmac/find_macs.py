@@ -37,6 +37,10 @@ def find_and_notify(product_type: ProductType, specs: Dict[str, str], account_si
 def _find_and_notify(product_type: ProductType, specifications: List[Specification], notifier: Notifier,
                      send_to: List[str], verbose: bool, no_notify: bool):
     matches = search_for_products_matching_specifications(product_type, specifications)
+    if not matches:
+        if verbose:
+            print("No matches found.")
+        return
     if no_notify or verbose:
         print("Found the following products matching given specifications:")
         for match in matches:
