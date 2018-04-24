@@ -6,17 +6,28 @@ if __name__ == '__main__':
     import json
     parser = argparse.ArgumentParser()
     parser.add_argument('product_type', metavar='product-type', choices=[t for t in ProductType],
-                        type=lambda s: getattr(ProductType, s))
-    parser.add_argument('--twilio-file', type=argparse.FileType('r'), default='twilio_conf.json')
-    parser.add_argument('--twilio-sid')
-    parser.add_argument('--twilio-token')
-    parser.add_argument('--send-from')
-    parser.add_argument('--send-to')
-    parser.add_argument('--emergency-contact')
-    parser.add_argument('--specs', type=json.loads, default={})
-    parser.add_argument('--retry', type=int, default=0)
-    parser.add_argument('--verbose', action='store_true')
-    parser.add_argument('--no-notify', action='store_true')
+                        type=lambda s: getattr(ProductType, s),
+                        help="The product space to search through. See documentation.")
+    parser.add_argument('--twilio-file', type=argparse.FileType('r'), default='twilio_conf.json',
+                        help="A JSON file providing Twilio configuration. See documentation.")
+    parser.add_argument('--twilio-sid',
+                        help="Your Twilio account SID.")
+    parser.add_argument('--twilio-token',
+                        help="Your Twilio account auth token.")
+    parser.add_argument('--send-from',
+                        help="The phone number to send results from. (Your Twilio phone number.)")
+    parser.add_argument('--send-to',
+                        help="The phone number to send results to.")
+    parser.add_argument('--emergency-contact',
+                        help="A phone number to contact if an exception occurs. Only compatible with --retry.")
+    parser.add_argument('--specs', type=json.loads, default={},
+                        help="The specifications to search for. See documentation.")
+    parser.add_argument('--retry', type=int, default=0,
+                        help="Retry the search every RETRY minutes. A value of 0 means no retry will occur.")
+    parser.add_argument('--verbose', action='store_true',
+                        help="Output information about matches found to stdout.")
+    parser.add_argument('--no-notify', action='store_true',
+                        help="Do not send text notifications.")
     args = parser.parse_args()
 
     twilio_account_sid = None
