@@ -8,7 +8,7 @@ if __name__ == '__main__':
     parser.add_argument('product_type', metavar='product-type', choices=[t for t in ProductType],
                         type=lambda s: getattr(ProductType, s),
                         help="The product space to search through. See documentation.")
-    parser.add_argument('--twilio-file', type=argparse.FileType('r'), default='twilio_conf.json',
+    parser.add_argument('--twilio-file', type=argparse.FileType('r'),
                         help="A JSON file providing Twilio configuration. See documentation.")
     parser.add_argument('--twilio-sid',
                         help="Your Twilio account SID.")
