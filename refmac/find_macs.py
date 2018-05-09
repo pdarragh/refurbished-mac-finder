@@ -10,7 +10,7 @@ from typing import Dict, List, Optional
 def find_and_notify(product_type: ProductType, specs: Dict[str, str], account_sid: str, auth_token: str, send_from: str,
                     send_to: List[str], retry: int, verbose: bool, no_notify: bool, emergency_contact: Optional[str]):
     specifications = build_specifications(**specs)
-    notifier = Notifier(account_sid, auth_token, send_from)
+    notifier = Notifier(account_sid, auth_token, send_from, no_notify)
     find = partial(_find_and_notify, product_type, specifications, notifier, send_to, verbose, no_notify)
     # Run once no matter what.
     find()
